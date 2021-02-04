@@ -1,18 +1,19 @@
 $border-color: #e9e9e9;
 $shadow-color: #cccccc;
 body{
-    text-align: center;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
     height:100%;
     margin-top:auto;
     font-size: 14px;
     font-family: arial,sans-serif;
     color: #222;
 }
+.flex{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align: center;
+}
 form{
-    
     div{
         margin: auto;
         display: flex;
@@ -45,7 +46,7 @@ form{
     border-color: $border-color;
     text-align: left;
     display: flex;
-    flex: 100%;
+    flex: 80%;
     margin-top: 37px;
     height: 34px;
     word-wrap: break-word;
@@ -53,6 +54,9 @@ form{
 }
 .search_bar:hover{
     box-shadow: 0 0 4px 1px $shadow-color;
+}
+.search_bar:focus{
+    outline-width:0;
 }
 .search_button{
     padding-top: 50px;

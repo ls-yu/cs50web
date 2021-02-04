@@ -1,5 +1,12 @@
 body {
-  text-align: center;
+  height: 100%;
+  margin-top: auto;
+  font-size: 14px;
+  font-family: arial,sans-serif;
+  color: #222;
+}
+
+.flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10,11 +17,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  height: 100%;
-  margin-top: auto;
-  font-size: 14px;
-  font-family: arial,sans-serif;
-  color: #222;
+  text-align: center;
 }
 
 form div {
@@ -63,9 +66,9 @@ form div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 100%;
-      -ms-flex: 100%;
-          flex: 100%;
+  -webkit-box-flex: 80%;
+      -ms-flex: 80%;
+          flex: 80%;
   margin-top: 37px;
   height: 34px;
   word-wrap: break-word;
@@ -75,6 +78,10 @@ form div {
 .search_bar:hover {
   -webkit-box-shadow: 0 0 4px 1px #cccccc;
           box-shadow: 0 0 4px 1px #cccccc;
+}
+
+.search_bar:focus {
+  outline-width: 0;
 }
 
 .search_button {
