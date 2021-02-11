@@ -1,0 +1,13 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block body %}
+    <h1>New Wiki Page:</h1>
+    {% if title|length > 0 %}
+    <p>Error: there is already a wiki page called {{title}}</p>
+    {% endif %}
+    <form action="{% url 'encyclopedia:add' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+{% endblock %}
