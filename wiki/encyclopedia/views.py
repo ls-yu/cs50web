@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django import forms
 from django.utils.safestring import mark_safe
+import random as rand
 
 from . import util
 
@@ -19,7 +20,7 @@ def entry(request, title):
         return HttpResponse(f"Error: Could not find a page for {title.capitalize()}!")
     else:
         return render(request, "encyclopedia/entry.html", {
-            "title": title.capitalize(),
+            "title": title,
             "entry": util.get_entry(title)
         })
 
@@ -35,8 +36,6 @@ def search(request):
 
 def search_results(request, search):
     get_items = []
-    print(type(util.list_entries()[1]))
-    print(type(search))
     for entry in util.list_entries():
         if search in entry.lower():
             get_items.append(entry)
@@ -57,11 +56,36 @@ def new_page(request, title=None):
 def add(request):
     if request.method == "POST":
         form = NewPageForm(request.POST)
-    if form.is_valid():
-        title = form.cleaned_data["title"]
-        for page in util.list_entries():
-            if page.lower() == title.lower():
-                return new_page(request, title)
-        content = form.cleaned_data["content"]
-        util.save_entry(title, content)
-        return entry(request, title)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            for page in util.list_entries():
+                if page.lower() == title.lower():
+                    return new_page(request, title)
+            content = form.cleaned_data["content"]
+            util.save_entry(title, content)
+            return entry(request, title)
+    else:
+        return HttpResponse("Error")
+
+class EditPageForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea, label=mark_safe("Content"))
+
+def edit_page(request, title):
+    return render(request, "encyclopedia/edit_page.html", {
+        "form": EditPageForm({'content': util.get_entry(title)}),
+        "title": title
+    })
+
+def edit(request, title):
+    if request.method == "POST":
+        form = EditPageForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+            util.save_entry(title, content)
+            return entry(request, title)
+    else:
+        return HttpResponse("Error")
+    
+def random(request):
+    title = util.list_entries()[rand.randint(0, len(util.list_entries()))]
+    return entry(request, title)
