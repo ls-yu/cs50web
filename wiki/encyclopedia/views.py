@@ -87,5 +87,5 @@ def edit(request, title):
         return HttpResponse("Error")
     
 def random(request):
-    title = util.list_entries()[rand.randint(0, len(util.list_entries()))]
+    title = util.list_entries()[rand.randint(0, len(util.list_entries())-1)]
     return entry(request, title)
