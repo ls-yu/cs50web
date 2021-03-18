@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}New Listing{% endblock %}
+
+{% block body %}
+{% if user.is_authenticated %}
+    <h1>Make New Listing</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form> 
+{% else %}
+{% endif %}
+{% endblock %}

@@ -3,5 +3,11 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    {% for listing in listings %}
+        {% if listing.state is True %}
+        <li>
+            <a href="{% url 'listing' id_number=listing.auto_increment_id %}">{{listing.title}}</a>
+        </li>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

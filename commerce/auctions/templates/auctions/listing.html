@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html" %}
+{% block title %}{{listing.title}}{% endblock %}
+
+{% block body %}
+    <h1>{{listing.title}}</h1>
+    <h3>Sold by: {{listing.seller}}</h3>
+    <img src="{{listing.image}}">
+    <p>{{listing.description}}</p>
+    <h3>Starting bid: {{listing.starting_bid}}</h3>
+    <h3>Current bid: {{listing.current_bid}}</h3>
+    {% if request.user.is_authenticated %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form> 
+    {% endif %}
+{% endblock %}
