@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from decimal import Decimal
 
 class User(AbstractUser):
     pass
@@ -34,16 +34,17 @@ class Listing(models.Model):
     )
     auto_increment_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
-    seller = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    seller = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="listings")
     description = models.CharField(max_length=1000)
     starting_bid = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.URLField(blank=True)
     current_bid = models.DecimalField(max_digits=6, decimal_places=2) # will have to set this to the max value of the bids
     num_bids = models.IntegerField()
     state = models.BooleanField()
+    winner = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=True, null=True, related_name="auctions_won")
     
     def __str__(self):
-        return f"{self.title}: sold by {self.seller}. (starting bid: {starting_bid}, current bid: {current_bid}.)"
+        return f"{self.title}: sold by {self.seller}. (starting bid: {self.starting_bid}, current bid: {self.current_bid}.)"
 
 class Bid(models.Model):
     auto_increment_id = models.AutoField(primary_key=True)
@@ -52,7 +53,7 @@ class Bid(models.Model):
     listing = models.ForeignKey(to=Listing, on_delete=models.CASCADE, related_name="bids")
 
     def __str__(self):
-        return f"{self.bidder} offering {self.amount} on {self.listing}"
+        return f"{self.bidder} offering ${self.amount} on {self.listing.title}"
 
 
 class Comment(models.Model):
@@ -63,3 +64,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.commenter} comments: {self.text} on {self.listing}"
+
+class Watchlist(models.Model):
+    user = models.OneToOneField(to=User, primary_key=True, on_delete=models.CASCADE, related_name="user")
+    listings = models.ManyToManyField(Listing, blank=True, related_name="listings")
+
+    def __str__(self):
+        return f"{self.user} is watching {self.listings}"
+

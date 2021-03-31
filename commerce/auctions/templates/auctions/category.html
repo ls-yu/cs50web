@@ -1,0 +1,11 @@
+{% extends "auctions/layout.html" %}
+{% block title %}{{category}}{% endblock %}
+
+{% block body %}
+    <h3>{{category}}</h3>
+    {% for listing in listings %}
+    <li>
+        <a href="{% url 'listing' id_number=listing.auto_increment_id %}">{{listing.title}}</a>
+    </li>
+    {% endfor %}
+{% endblock %}

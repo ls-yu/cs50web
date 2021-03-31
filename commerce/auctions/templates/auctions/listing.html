@@ -3,16 +3,54 @@
 
 {% block body %}
     <h1>{{listing.title}}</h1>
+    {% if request.user.is_authenticated and request.user != seller and not watching%}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" name = "action" value="Add to Watchlist">
+        </form>
+    {% endif %}
+    {% if request.user.is_authenticated and request.user != seller and watching %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" name = "action" value="Remove from Watchlist">
+        </form>
+    {% endif %}
+    <p>{{message}}</p>
     <h3>Sold by: {{listing.seller}}</h3>
+    <h4>Category: {{listing.category}}</h4>
     <img src="{{listing.image}}">
     <p>{{listing.description}}</p>
-    <h3>Starting bid: {{listing.starting_bid}}</h3>
-    <h3>Current bid: {{listing.current_bid}}</h3>
-    {% if request.user.is_authenticated %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit">
-    </form> 
+    {% if listing.state %}
+        <h3>Starting bid: {{listing.starting_bid}}</h3>
+        <h3>Current bid: {{listing.current_bid}}</h3>
+        {% if request.user.is_authenticated and request.user != seller %}
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" name = "action" value="Bid">
+        </form>
+        <h3>Comment:</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ comment }}
+            <input type="submit" name = "action" value="Comment">
+        </form>
+        {% endif %}
+        {% if request.user == listing.seller and listing.num_bids > 0 %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" name = "action" value="End Auction">
+        </form>
+        {% endif %}
+    {% else %}
+        <h3>This listing is closed.</h3>
+        {% if listing.winner == request.user %}
+            <h3>Congrats, you won this auction.</h3>
+        {% endif %}
     {% endif %}
+    <h3>Comments:</h3>
+    {% for comment in listing_comments %}
+        <h4>{{comment.commenter}}</h4>
+        <p>{{comment.text}}</p>
+    {% endfor %}
 {% endblock %}
