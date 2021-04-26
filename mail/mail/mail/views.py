@@ -25,6 +25,7 @@ def index(request):
 @login_required
 def compose(request):
 
+    print("entered compose function in views.py")
     # Composing a new email must be via POST
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
