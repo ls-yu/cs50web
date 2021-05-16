@@ -69,7 +69,7 @@ def compose(request):
         for recipient in recipients:
             email.recipients.add(recipient)
         email.save()
-
+    print(email)
     return JsonResponse({"message": "Email sent successfully."}, status=201)
 
 
